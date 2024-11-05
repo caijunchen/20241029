@@ -1,6 +1,19 @@
+let font;  //載入字型文字
+let points = [];  //轉成點狀文字
+let angle = 0
+let r = 0.5
+// ==================================================
+function preload(){  //在執行setup()前，必須先做此函數執行，主要先載入字型
+    //為載入在fonts資料夾內的Zeyada-Regular.ttf字型
+    font = loadFont("fonts/LXGWWenKaiTC-Regular.ttf") 
+}
+
 function setup() {  //設定初始內容，只會執行一次
   createCanvas(windowWidth, windowHeight);  //產生一個畫布，寬為視窗寬度，高為視窗高度
   background(255); // 背景設為白色
+  points = font.textToPoints("陳采均", -300, 80, 200, {
+    sampleFactor:5
+  });//轉成文字圖檔，放在(0, 200)位置，圖形大小為200，sampleFactor為點數距離大小。值越小代表點數越少
 }
 
 function draw() {  //畫圖，每秒會畫60次
@@ -66,6 +79,17 @@ function draw() {  //畫圖，每秒會畫60次
           rect(100+200*i,100+200*j,rect_width)  
       }
     } 
+    
+    translate(width/2,height/2)  //把原本原點(0,0)在左上角，改為到畫布中心點(width/2,height/2)為原點(0,0)
+    rotate((frameCount)%360)  //依照frameCount除以360求餘數
+  
+    for (let i=0; i<points.length-1; i++) { 
+      stroke("#006d77")  //線條的顏色
+      strokeWeight(2)  //線條的粗細
+      line(points[i].x+r*sin(angle+i*10),points[i].y+r*sin(angle+i*10),points[i+1].x+r*sin(angle+i*10),points[i+1].y+r*sin(angle+i*10))  //畫線，兩個點構成一條線
+      //畫線，兩個點第一個點(points[i].x,points[i].y)，第二個點(points[i+1].x,points[i+1].y)
+    } 
+    angle = angle+50
 }
 
 // 定義繪製花朵的函數
